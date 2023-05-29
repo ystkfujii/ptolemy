@@ -10,29 +10,33 @@ locals {
 
   instance_type_bn = "e-medium"
   instance_type_px = "e-medium"
-  instance_type_cp = "e-medium"
-  instance_type_wk = "e-medium"
+  instance_type_cp = "e-large8"
+  instance_type_wk = "e-large16"
 
   private_network_cidr = "192.168.50.0/23"
   instances_cp_west = {
-    "cp01" : { private_ip : "192.168.50.13/23" }
+    "cp01" : { private_ip : "192.168.50.31/23" }
+    "cp02" : { private_ip : "192.168.50.32/23" }
+    "cp03" : { private_ip : "192.168.50.33/23" }
   }
   instances_cp_east = {
-    "cp01" : { private_ip : "192.168.51.13/23" }
+    "cp01" : { private_ip : "192.168.51.31/23" }
+    "cp02" : { private_ip : "192.168.51.32/23" }
+    "cp03" : { private_ip : "192.168.51.33/23" }
   }
   instances_wk_west = {
-    "wk01" : { private_ip : "192.168.50.23/23" }
-    "wk02" : { private_ip : "192.168.50.24/23" }
+    "wk01" : { private_ip : "192.168.50.41/23" }
+    "wk02" : { private_ip : "192.168.50.42/23" }
   }
   instances_wk_east = {
-    "wk01" : { private_ip : "192.168.50.23/23" }
-    "wk02" : { private_ip : "192.168.51.24/23" }
+    "wk01" : { private_ip : "192.168.51.41/23" }
+    "wk02" : { private_ip : "192.168.51.41/23" }
   }
 
-  private_ip_bn_west = "192.168.50.2/23"
-  private_ip_px_west = "192.168.50.3/23"
-  private_ip_bn_east = "192.168.51.2/23"
-  private_ip_px_east = "192.168.51.3/23"
+  private_ip_bn_west = "192.168.50.11/23"
+  private_ip_px_west = "192.168.50.21/23"
+  private_ip_bn_east = "192.168.51.11/23"
+  private_ip_px_east = "192.168.51.21/23"
 }
 
 #####
@@ -120,7 +124,6 @@ module "k8s_infra_east" {
   providers = {
     nifcloud = nifcloud.east
   }
-  # version = "0.0.5"
 
   availability_zone = local.az_east
   prefix            = local.prefix

@@ -4,7 +4,7 @@ terraform {
   cloud {
     organization = "ystkfujii"
     workspaces {
-      name = "ptolemy"
+      name = "kubernetes"
     }
   }
 
