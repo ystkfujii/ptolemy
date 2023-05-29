@@ -1,0 +1,7 @@
+---
+
+- name: install for bastion server
+  hosts: bastion
+  gather_facts: True
+  roles:
+    - role: downloaded.andrewrothstein.kubectl
