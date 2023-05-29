@@ -39,3 +39,18 @@ ssh-add /.ssh/key
 ```
 ansible-playbook -i /wd/ansible/inventory/inventory.ini -e @/wd/${CLUSTER_INFO_FILE}  cluster.yml
 ```
+
+```
+cp /wd/ansible/setup_bastion.yml .
+ansible-playbook -i /wd/ansible/inventory/inventory.ini -e @/wd/${CLUSTER_INFO_FILE} setup_bastion.yml
+```
+
+```
+ansible-playbook -i /wd/ansible/inventory/inventory.ini -e @/wd/${CLUSTER_INFO_FILE}
+```
+
+```
+go install github.com/vmware-tanzu/sonobuoy@latest
+sonobuoy run --mode=certified-conformance
+sonobuoy status
+```
