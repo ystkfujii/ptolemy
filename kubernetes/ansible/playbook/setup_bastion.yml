@@ -45,7 +45,7 @@
   hosts: bastion
   tasks:
   - name: Ensures ~/.kube dir exists
-    file: 
+    file:
       path: "~/.kube"
       state: directory
   - name: Copy kubeconfig from local to bastion
