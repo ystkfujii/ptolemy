@@ -1,0 +1,59 @@
+---
+- name: gather
+  hosts: all
+  gather_facts: True
+- name: set up /etc/hosts
+  hosts: bastion
+  gather_facts: False
+  any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
+  environment: "{{ proxy_disable_env }}"
+  vars:
+    dns_late: false
+    populate_inventory_to_hosts_file: true
+    populate_loadbalancer_apiserver_to_hosts_file: true
+    # etc_hosts_localhost_entries will be written into /etc/hosts file.
+    populate_localhost_entries_to_hosts_file: true
+    etc_hosts_localhost_entries:
+      127.0.0.1:
+        expected:
+          - localhost
+          - localhost.localdomain
+      ::1:
+        expected:
+          - localhost6
+          - localhost6.localdomain
+        unexpected:
+          - localhost
+          - localhost.localdomain
+  roles:
+    - { role: kubespray-defaults }
+  tasks:
+    - import_tasks: roles/kubernetes/preinstall/tasks/0090-etchosts.yml
+- name: Fetch kubeconfig from controle plane
+  hosts: kube_control_plane[0]
+  tasks:
+  - name: Fetch kube.config
+    fetch:
+      src: /etc/kubernetes/admin.conf
+      dest: ./
+      flat: yes
+      owner: root
+      group: root
+      mode: 400
+    tags: "kubeconfig"
+- name: Copy kubeconfig to bastion
+  hosts: bastion
+  tasks:
+  - name: Ensures ~/.kube dir exists
+    file: 
+      path: "~/.kube"
+      state: directory
+  - name: Copy kubeconfig from local to bastion
+    copy:
+      src: "{{ item }}"
+      dest: ~/.kube/config
+      owner: root
+      group: root
+      mode: 400
+    with_fileglob:
+    - ./admin.conf

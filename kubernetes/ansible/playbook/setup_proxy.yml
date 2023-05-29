@@ -1,0 +1,10 @@
+---
+
+- name: setup squid
+  hosts: proxy
+  become: yes
+  vars:
+    squid_http_port: 3128
+  roles:
+    - role: downloaded.vcc.caeit.squid
+      tags: ["squid"]
