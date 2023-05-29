@@ -4,7 +4,7 @@ locals {
   az_west     = "west-11"
   az_east     = "east-11"
 
-  prefix = "plm"
+  prefix = "tlm"
 
   instance_key_name = "homek8slab"
 
@@ -86,7 +86,8 @@ resource "nifcloud_elastic_ip" "px_east" {
 # Module
 #
 module "k8s_infra_west" {
-  source  = "github.com/ystkfujii/terraform-nifcloud-k8s-infrastructure"
+  source  = "ystkfujii/k8s-infrastructure/nifcloud"
+  version = "0.0.5"
   providers = {
     nifcloud = nifcloud.west
   }
@@ -114,7 +115,8 @@ module "k8s_infra_west" {
 }
 
 module "k8s_infra_east" {
-  source  = "github.com/ystkfujii/terraform-nifcloud-k8s-infrastructure"
+  source  = "ystkfujii/k8s-infrastructure/nifcloud"
+  version = "0.0.5"
   providers = {
     nifcloud = nifcloud.east
   }
@@ -162,4 +164,27 @@ resource "nifcloud_security_group_rule" "any_from_another_reasion_west" {
   type        = "IN"
   protocol    = "ANY"
   cidr_ip     = local.private_network_cidr
+}
+
+resource "nifcloud_security_group_rule" "ssh_from_working_server_east" {
+  provider = nifcloud.east
+  security_group_names = [
+    module.k8s_infra_east.security_group_name.bastion,
+  ]
+  type      = "IN"
+  from_port = 22
+  to_port   = 22
+  protocol  = "TCP"
+  cidr_ip   = var.working_server_ip
+}
+resource "nifcloud_security_group_rule" "ssh_from_working_server_west" {
+  provider = nifcloud.west
+  security_group_names = [
+    module.k8s_infra_west.security_group_name.bastion,
+  ]
+  type      = "IN"
+  from_port = 22
+  to_port   = 22
+  protocol  = "TCP"
+  cidr_ip   = var.working_server_ip
 }
