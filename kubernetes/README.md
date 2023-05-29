@@ -41,12 +41,12 @@ ansible-playbook -i /wd/ansible/inventory/inventory.ini -e @/wd/${CLUSTER_INFO_F
 ```
 
 ```
-cp /wd/ansible/setup_bastion.yml .
+cp /wd/ansible/playbook/setup_bastion.yml .
 ansible-playbook -i /wd/ansible/inventory/inventory.ini -e @/wd/${CLUSTER_INFO_FILE} setup_bastion.yml
 ```
 
 ```
-ansible-playbook -i /wd/ansible/inventory/inventory.ini -e @/wd/${CLUSTER_INFO_FILE}
+ansible-playbook -i ansible/inventory/inventory.ini -e @${CLUSTER_INFO_FILE} ansible/playbook/install_component.yml
 ```
 
 ```

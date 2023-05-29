@@ -17,12 +17,9 @@ locals {
   instances_cp_west = {
     "cp01" : { private_ip : "192.168.50.31/23" }
     "cp02" : { private_ip : "192.168.50.32/23" }
-    "cp03" : { private_ip : "192.168.50.33/23" }
   }
   instances_cp_east = {
     "cp01" : { private_ip : "192.168.51.31/23" }
-    "cp02" : { private_ip : "192.168.51.32/23" }
-    "cp03" : { private_ip : "192.168.51.33/23" }
   }
   instances_wk_west = {
     "wk01" : { private_ip : "192.168.50.41/23" }
@@ -30,7 +27,7 @@ locals {
   }
   instances_wk_east = {
     "wk01" : { private_ip : "192.168.51.41/23" }
-    "wk02" : { private_ip : "192.168.51.41/23" }
+    "wk02" : { private_ip : "192.168.51.42/23" }
   }
 
   private_ip_bn_west = "192.168.50.11/23"
@@ -91,7 +88,7 @@ resource "nifcloud_elastic_ip" "px_east" {
 #
 module "k8s_infra_west" {
   source  = "ystkfujii/k8s-infrastructure/nifcloud"
-  version = "0.0.5"
+  version = "0.0.6"
   providers = {
     nifcloud = nifcloud.west
   }
@@ -120,7 +117,7 @@ module "k8s_infra_west" {
 
 module "k8s_infra_east" {
   source  = "ystkfujii/k8s-infrastructure/nifcloud"
-  version = "0.0.5"
+  version = "0.0.6"
   providers = {
     nifcloud = nifcloud.east
   }
