@@ -104,8 +104,8 @@ module "k8s_infra_west" {
   instance_type_cp = local.instance_type_cp
   instance_type_wk = local.instance_type_wk
 
-  instances_cp      = local.instances_cp_west
-  instances_wk      = local.instances_wk_west
+  instances_cp = local.instances_cp_west
+  instances_wk = local.instances_wk_west
 
   elasticip_bn = nifcloud_elastic_ip.bn_west.public_ip
   elasticip_px = nifcloud_elastic_ip.px_west.public_ip
@@ -134,8 +134,8 @@ module "k8s_infra_east" {
   instance_type_cp = local.instance_type_cp
   instance_type_wk = local.instance_type_wk
 
-  instances_cp      = local.instances_cp_east
-  instances_wk      = local.instances_wk_east
+  instances_cp = local.instances_cp_east
+  instances_wk = local.instances_wk_east
 
   elasticip_bn = nifcloud_elastic_ip.bn_east.public_ip
   elasticip_px = nifcloud_elastic_ip.px_east.public_ip
@@ -152,18 +152,18 @@ resource "nifcloud_security_group_rule" "any_from_another_reasion_east" {
   security_group_names = concat(
     [for v in module.k8s_infra_east.security_group_name : v],
   )
-  type        = "IN"
-  protocol    = "ANY"
-  cidr_ip     = local.private_network_cidr
+  type     = "IN"
+  protocol = "ANY"
+  cidr_ip  = local.private_network_cidr
 }
 resource "nifcloud_security_group_rule" "any_from_another_reasion_west" {
   provider = nifcloud.west
   security_group_names = concat(
     [for v in module.k8s_infra_west.security_group_name : v],
   )
-  type        = "IN"
-  protocol    = "ANY"
-  cidr_ip     = local.private_network_cidr
+  type     = "IN"
+  protocol = "ANY"
+  cidr_ip  = local.private_network_cidr
 }
 
 resource "nifcloud_security_group_rule" "ssh_from_working_server_east" {
