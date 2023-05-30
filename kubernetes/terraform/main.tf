@@ -4,7 +4,7 @@ locals {
   az_west     = "west-11"
   az_east     = "east-11"
 
-  prefix = "tlm"
+  prefix = "ptlm"
 
   instance_key_name = "homek8slab"
 
@@ -88,7 +88,7 @@ resource "nifcloud_elastic_ip" "px_east" {
 #
 module "k8s_infra_west" {
   source  = "ystkfujii/k8s-infrastructure/nifcloud"
-  version = "0.0.6"
+  version = "0.0.7"
   providers = {
     nifcloud = nifcloud.west
   }
@@ -117,7 +117,7 @@ module "k8s_infra_west" {
 
 module "k8s_infra_east" {
   source  = "ystkfujii/k8s-infrastructure/nifcloud"
-  version = "0.0.6"
+  version = "0.0.7"
   providers = {
     nifcloud = nifcloud.east
   }
@@ -142,6 +142,41 @@ module "k8s_infra_east" {
 
   private_ip_bn = local.private_ip_bn_east
   private_ip_px = local.private_ip_px_east
+}
+
+#####
+# Load Balancer
+#
+resource "nifcloud_load_balancer" "east" {
+  provider = nifcloud.east
+  load_balancer_name = "east${local.prefix}lb"
+  instance_port = 80
+  load_balancer_port = 30080
+  accounting_type = "2"
+  instances = [ for k,v in module.k8s_infra_east.worker_info : v.instance_id ]
+}
+resource "nifcloud_load_balancer_listener" "east" {
+  provider = nifcloud.east
+  load_balancer_name = nifcloud_load_balancer.east.load_balancer_name
+  instance_port = 443
+  load_balancer_port = 30443
+  instances = [ for k,v in module.k8s_infra_east.worker_info : v.instance_id ]
+}
+
+resource "nifcloud_load_balancer" "west" {
+  provider = nifcloud.west
+  load_balancer_name = "west${local.prefix}lb"
+  instance_port = 80
+  load_balancer_port = 30080
+  accounting_type = "2"
+  instances = [ for k,v in module.k8s_infra_west.worker_info : v.instance_id ]
+}
+resource "nifcloud_load_balancer_listener" "west" {
+  provider = nifcloud.west
+  load_balancer_name = nifcloud_load_balancer.west.load_balancer_name
+  instance_port = 443
+  load_balancer_port = 30443
+  instances = [ for k,v in module.k8s_infra_west.worker_info : v.instance_id ]
 }
 
 #####
