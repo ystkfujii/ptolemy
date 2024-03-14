@@ -36,3 +36,6 @@ terraform.rc
 #
 kubernetes/ansible/roles/downloaded*
 kubernetes/ansible/inventory/credentials
+
+
+node_modules
