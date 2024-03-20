@@ -4,23 +4,28 @@
     "@graphql-codegen/client-preset": "4.2.4",
     "@graphql-codegen/introspection": "4.0.3",
     "@graphql-typed-document-node/core": "^3.2.0",
-    "@types/react": "^18.2.66",
-    "@types/react-dom": "^18.2.22",
-    "typescript": "^5.1.6"
+    "@types/react": "^18.2.67",
+    "ts-loader": "^9.5.1",
+    "typescipt": "^1.0.0",
+    "typescript": "^5.4.2",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4"
   },
   "dependencies": {
     "@apollo/client": "^3.9.7",
+    "@emotion/react": "^11.11.4",
+    "@mui/icons-material": "^5.15.13",
+    "@mui/material": "^5.15.13",
+    "@types/react-dom": "^18.2.22",
     "graphql": "^16.8.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "^5.0.1"
+    "react-dom": "^18.2.0"
   },
-  "main": "/src/index.tsx",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
+    "build": "webpack",
+    "watch": "webpack -w",
+    "start": "webpack-cli serve --mode development",
     "codegen": "graphql-codegen --config codegen.ts"
   },
   "browserslist": {
